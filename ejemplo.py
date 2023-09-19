@@ -1,7 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-import webbrowser
-import os
 
 class App(ttk.Frame):
     def __init__(self, parent):
