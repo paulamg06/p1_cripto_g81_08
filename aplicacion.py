@@ -27,7 +27,7 @@ class Aplicacion(ttk.Frame):
         self.titulo_c_a = ttk.Label(parent, text="Cuentas atrás:")
         self.titulo_c_a.place(x=300, y=5)
 
-        self.info_evento = ttk.Label(parent, text="Concierto Ana Mena: 20-09-2023, 18:59")
+        self.info_evento = ttk.Label(parent, text="")
         self.info_evento.place(x=20, y=35)
 
         self.info_cuenta_atras_evento = ttk.Label(parent, text="")

@@ -15,12 +15,18 @@ class Evento():
         return datetime.strptime(date, '%d-%m-%Y, %H:%M')
 
 
+    def paso_unidades(self, dias):
+        """Función que pasa la diferencia a años, meses y días"""
+        days = dias % 30
+        months =
+        years = (dias/30) / 365
+
     def hacer_cuenta_atras(self):
         """Función que hace la cuenta atrás del evento"""
         #Obtenemos la fecha actual
         fecha_actual = datetime.now()
         diferencia = self.__fecha - fecha_actual
-
+        print(diferencia.se)
         return diferencia
 
 
