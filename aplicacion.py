@@ -1,19 +1,38 @@
 """Fichero que contiene la clase de la aplicación"""
 from tkinter import ttk
 from evento import Evento
+from login_window import LoginWindow
 
 """Recordatorio: ttk.Label para los textos, ttk.Entry para las cajas, ttk.Bottom para los botones.
 Siempre hay que poner el parent"""
 
-class Aplicacion(ttk.Frame):
+class Aplicacion():
     """Clase que contiene toda la estructura de la apliacion"""
-    def __init__(self, parent):
-        super().__init__(parent)
+    def __init__(self, root):
+        self.root = root
+        # Le damos un titulo al programa
+        self.root.title("Cuenta atras")
+
+        self.ventana_app = None
+
+        #Ventana de inicio de sesion
+        self.inicio_sesion = LoginWindow(self)
+
+    def entrada_app(self, usuario):
+        """Método que se ejecuta tras un inicio de sesión correcto y llama a la ventana principal"""
+        if not self.ventana_app:
+            self.ventana_principal(usuario)
+
+    def ventana_principal(self, usuario):
+        """Método que crea el texto, cuadros y botones de nuestra aplicacion"""
+        self.ventana_app = ttk.Toplevel()
+        # Le damos un tamaño al programa
+        self.ventana_app.config(width=600, height=500)
 
         #Para ir imprimiendo los últimos eventos (esto ya lo cambiaremos para que no se sobreescriban)
         self.contador = 0
 
-        self.scroll = ttk.Scrollbar(parent, orient="vertical")
+        self.scroll = ttk.Scrollbar(self.root, orient="vertical")
         self.scroll.place(x=560, heigh=500, width=50)
 
         #Lista de eventos
@@ -21,43 +40,43 @@ class Aplicacion(ttk.Frame):
         self.cuenta_atras = []
 
         'Texto'
-        self.bienvenida = ttk.Label(parent, text="Tus eventos:")
+        self.bienvenida = ttk.Label(self.root, text=f"{usuario}. Tus eventos:")
         self.bienvenida.place(x=20, y=5)
 
-        self.titulo_c_a = ttk.Label(parent, text="Cuentas atrás:")
+        self.titulo_c_a = ttk.Label(self.root, text="Cuentas atrás:")
         self.titulo_c_a.place(x=300, y=5)
 
-        self.info_evento = ttk.Label(parent, text="")
+        self.info_evento = ttk.Label(self.root, text="")
         self.info_evento.place(x=20, y=35)
 
-        self.info_cuenta_atras_evento = ttk.Label(parent, text="")
+        self.info_cuenta_atras_evento = ttk.Label(self.root, text="")
         self.info_cuenta_atras_evento.place(x=300, y=35)
 
-        self.separador = ttk.Label(parent, text="-----------------------------------------------------")
+        self.separador = ttk.Label(self.root, text="-----------------------------------------------------")
         self.separador.place(x=0, y=55)
 
-        self.texto_nombre = ttk.Label(parent, text="Nombre del evento: ")
+        self.texto_nombre = ttk.Label(self.root, text="Nombre del evento: ")
         self.texto_nombre.place(x=20, y=75)
 
-        self.texto_fecha = ttk.Label(parent, text="Fecha del evento (dd-mm-aaaa): ")
+        self.texto_fecha = ttk.Label(self.root, text="Fecha del evento (dd-mm-aaaa): ")
         self.texto_fecha.place(x=20, y=110)
 
-        self.texto_hora = ttk.Label(parent, text="*Hora del evento (hh:mm): ")
+        self.texto_hora = ttk.Label(self.root, text="*Hora del evento (hh:mm): ")
         self.texto_hora.place(x=20, y=145)
 
 
         'Cuadros'
-        self.cuadro_nombre = ttk.Entry(parent)
+        self.cuadro_nombre = ttk.Entry(self.root)
         self.cuadro_nombre.place(x=130, y=75)
 
-        self.cuadro_fecha = ttk.Entry(parent)
+        self.cuadro_fecha = ttk.Entry(self.root)
         self.cuadro_fecha.place(x=200, y=110, width=70)
 
-        self.cuadro_hora = ttk.Entry(parent)
+        self.cuadro_hora = ttk.Entry(self.root)
         self.cuadro_hora.place(x=170, y=145, width=50)
 
         'Botones'
-        self.introducir = ttk.Button(parent, text="Nuevo evento", command=self.crear_nuevo_evento)
+        self.introducir = ttk.Button(self.root, text="Nuevo evento", command=self.crear_nuevo_evento)
         self.introducir.place(x=20, y=180)
 
     def comprobar_fecha(self, fecha:str):
