@@ -18,7 +18,7 @@ class Aplicacion(ttk.Frame):
 
         #Lista de eventos
         self.eventos = []
-        self.lista_info_eventos = []
+        self.cuenta_atras = []
 
         'Texto'
         self.bienvenida = ttk.Label(parent, text="Tus eventos:")
@@ -128,5 +128,9 @@ class Aplicacion(ttk.Frame):
             self.comprobar_hora(hora)
             self.eventos.append(Evento(nombre, fecha, hora))
 
+        #Guardamos la cuenta atrás
+        self.cuenta_atras.append(self.eventos[self.contador].cuenta_atras)
+
         self.info_evento.config(text=f"{self.eventos[self.contador].nombre}: {self.eventos[self.contador].fecha}")
+        self.info_cuenta_atras_evento.config(text=self.cuenta_atras[self.contador])
         self.contador += 1
