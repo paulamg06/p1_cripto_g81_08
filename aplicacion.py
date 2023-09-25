@@ -1,33 +1,42 @@
 """Fichero que contiene la clase de la aplicación"""
+import tkinter as tk
 from tkinter import ttk
 from evento import Evento
 from login_window import LoginWindow
+from ventana_menu import VentanaMenu
 
 """Recordatorio: ttk.Label para los textos, ttk.Entry para las cajas, ttk.Bottom para los botones.
 Siempre hay que poner el parent"""
 
-class Aplicacion():
+class Aplicacion(ttk.Frame):
     """Clase que contiene toda la estructura de la apliacion"""
     def __init__(self, root):
+        super().__init__()
         self.root = root
         # Le damos un titulo al programa
         self.root.title("Cuenta atras")
 
-        self.ventana_app = None
+        self.ventana_menu = None
+        self.ventana_ca = None
 
         #Ventana de inicio de sesion
         self.inicio_sesion = LoginWindow(self)
 
     def entrada_app(self, usuario):
         """Método que se ejecuta tras un inicio de sesión correcto y llama a la ventana principal"""
-        if not self.ventana_app:
+        if not self.ventana_menu:
+            self.ventana_menu = VentanaMenu(self, usuario)
+
+    def entrada_ca(self, usuario):
+        """Método que se ejecuta tras seleccionar su opción en el menú"""
+        if not self.ventana_ca:
+            self.ventana_ca = self.root
             self.ventana_principal(usuario)
 
     def ventana_principal(self, usuario):
         """Método que crea el texto, cuadros y botones de nuestra aplicacion"""
-        self.ventana_app = ttk.Toplevel()
         # Le damos un tamaño al programa
-        self.ventana_app.config(width=600, height=500)
+        self.ventana_ca.geometry("600x500")
 
         #Para ir imprimiendo los últimos eventos (esto ya lo cambiaremos para que no se sobreescriban)
         self.contador = 0

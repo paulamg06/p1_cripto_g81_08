@@ -5,9 +5,10 @@ from tkinter import messagebox
 class LoginWindow(tk.Toplevel):
     """Clase que contiene la ventana para que los usuarios inicien sesión"""
     def __init__(self, app):
-        super().__init__()
+        super().__init__(app)
         self.app = app
         self.title("Inicio de sesión")
+        self.geometry("300x150")
         self.interfaz()
 
     def interfaz(self):
@@ -34,10 +35,10 @@ class LoginWindow(tk.Toplevel):
         contraseña = self.cuadro_contraseña.get()
 
         #Inicio de sesión correcto
-        if usuario == "your_username" and contraseña == "your_password":
+        if usuario == "1234" and contraseña == "1234":
             messagebox.showinfo("Inicio de sesión correcto", "Bienvenido, " + usuario)
             #Pasamos a la siguiente ventana
-            self.app.ventana_principal(usuario)
+            self.app.entrada_app(usuario)
             self.destroy()
 
         else:
