@@ -20,7 +20,7 @@ class VentanaNuevoEvento(tk.Toplevel):
         self.scroll.place(x=560, heigh=500, width=50)
 
         # Lista de eventos
-        self.eventos = []
+        self.app.eventos = []
         self.cuenta_atras = []
 
         'Texto'
@@ -111,15 +111,16 @@ class VentanaNuevoEvento(tk.Toplevel):
 
         # La hora por defecto es 9:00
         if not hora:
-            self.eventos.append(Evento(nombre, fecha, "9:00"))
+            self.app.eventos.append(Evento(nombre, fecha, "9:00"))
         else:
             # Comprobamos el formato de la hora
             self.comprobar_hora(hora)
-            self.eventos.append(Evento(nombre, fecha, hora))
+            self.app.eventos.append(Evento(nombre, fecha, hora))
 
         # Guardamos la cuenta atrás
-        self.cuenta_atras.append(self.eventos[self.contador].cuenta_atras)
+        self.app.cuenta_atras.append(self.app.eventos[self.app.contador].cuenta_atras)
 
-        self.info_evento.config(text=f"{self.eventos[self.contador].nombre}: {self.eventos[self.contador].fecha}")
-        self.info_cuenta_atras_evento.config(text=self.cuenta_atras[self.contador])
-        self.contador += 1
+        self.app.info_evento.config(text=f"{self.app.eventos[self.app.contador].nombre}: {self.app.eventos[self.app.contador].fecha}")
+        self.app.info_cuenta_atras_evento.config(text=self.app.cuenta_atras[self.app.contador])
+
+        self.app.contador += 1

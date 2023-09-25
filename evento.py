@@ -15,12 +15,9 @@ class Evento():
         return datetime.strptime(date, '%d-%m-%Y, %H:%M')
 
 
-    def paso_unidades_fecha(self, dias):
-        """Función que pasa la diferencia a años, meses y días"""
-        years = dias // 365
-        months = (dias % 365) // 30
-        days = (dias % 365 ) % 30
-        return years, months, days
+    def calculo_años(self, days):
+        """Función que calcula los años"""
+        return days % 365
 
     def paso_unidades_hora(self, seconds):
         """Función que pasa los segundos a horas y minutos"""
@@ -29,18 +26,22 @@ class Evento():
 
         return hours, minutes
 
-
     def hacer_cuenta_atras(self):
         """Función que hace la cuenta atrás del evento"""
         #Obtenemos la fecha actual
         fecha_actual = datetime.now()
         diferencia = self.__fecha - fecha_actual
 
-        years, days, months = self.paso_unidades_fecha(diferencia.days)
+        if diferencia.days > 365:
+            years = self.calculo_años(diferencia.days)
+        else:
+            years = 0
+            hours, minutes = self.paso_unidades_hora(diferencia.seconds)
 
-        hours, minutes = self.paso_unidades_hora(diferencia.seconds)
+        if years == 0:
+            return str(CuentaAtras(None, diferencia.days, hours, minutes))
 
-        return str(CuentaAtras(years, days, months, hours, minutes))
+        return str(CuentaAtras(years, None, None, None))
 
 
     @property

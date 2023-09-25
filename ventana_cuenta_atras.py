@@ -22,11 +22,9 @@ class VentanaCuentaAtras(tk.Toplevel):
         self.titulo_c_a = tk.Label(self, text="Cuentas atrás:")
         self.titulo_c_a.place(x=300, y=5)
 
-        self.info_evento = tk.Label(self, text="")
-        self.info_evento.place(x=20, y=35)
-
-        self.info_cuenta_atras_evento = tk.Label(self, text="")
-        self.info_cuenta_atras_evento.place(x=300, y=35)
+        #Estos textos se rellenan cuando se introduzcan nuevos eventos
+        self.app.info_evento.place(x=20, y=35)
+        self.app.info_cuenta_atras_evento.place(x=300, y=35)
 
         #Boton para volver al menú principal
         self.menu_principal = tk.Button(self, text="Abrir menú principal", command=self.app.abrir_menu_principal)

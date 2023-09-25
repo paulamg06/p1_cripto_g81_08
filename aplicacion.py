@@ -1,8 +1,8 @@
 """Fichero que contiene la clase de la aplicación"""
 from tkinter import ttk
-from login_window import LoginWindow
+from ventana_inicio_sesion import LoginWindow
 from ventana_menu import VentanaMenu
-from ventana_ca import VentanaCuentaAtras
+from ventana_cuenta_atras import VentanaCuentaAtras
 from ventana_nuevo_evento import VentanaNuevoEvento
 
 """Recordatorio: ttk.Label para los textos, ttk.Entry para las cajas, ttk.Bottom para los botones.
@@ -17,6 +17,13 @@ class Aplicacion(ttk.Frame):
         self.root.title("Cuenta atras")
 
         self.usuario = ""
+        self.contador = 0
+        self.eventos = []
+        self.cuenta_atras = []
+
+        #Textos que se van a modificar en cuanto se añadan eventos
+        self.info_evento = ttk.Label(self, text="")
+        self.info_cuenta_atras_evento = ttk.Label(self, text="")
 
         self.ventana_menu = None
         self.ventana_cuenta_atras = None
@@ -24,6 +31,7 @@ class Aplicacion(ttk.Frame):
 
         #Ventana de inicio de sesion
         self.inicio_sesion = LoginWindow(self)
+
 
     def abrir_menu_principal(self):
         """Método que se ejecuta tras un inicio de sesión correcto y llama a la ventana principal"""
