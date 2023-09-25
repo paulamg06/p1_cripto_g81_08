@@ -37,8 +37,10 @@ class LoginWindow(tk.Toplevel):
         #Inicio de sesión correcto
         if usuario == "1234" and contraseña == "1234":
             messagebox.showinfo("Inicio de sesión correcto", "Bienvenido, " + usuario)
+            #Guardamos el usuario
+            self.app.usuario = usuario
             #Pasamos a la siguiente ventana
-            self.app.entrada_app(usuario)
+            self.app.abrir_menu_principal()
             self.destroy()
 
         else:
