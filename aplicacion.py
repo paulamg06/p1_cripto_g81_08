@@ -13,14 +13,13 @@ Siempre hay que poner el parent"""
 
 class Aplicacion(ttk.Frame):
     """Clase que contiene toda la estructura de la apliacion"""
-    def __init__(self, root):
+    def __init__(self, root, db_file):
         super().__init__()
         self.root = root
-        # Le damos un titulo al programa
-        self.root.title("Cuenta atras")
+        self.root.withdraw()
 
         #registro usuarios
-        self.registro = RegistroUsuarios()
+        self.registro = RegistroUsuarios(db_file)
 
         self.usuario = "" #La variable se almacena en la clase de registro
         self.contador = 0
@@ -31,6 +30,7 @@ class Aplicacion(ttk.Frame):
         self.info_evento = ttk.Label(self, text="")
         self.info_cuenta_atras_evento = ttk.Label(self, text="")
 
+        self.root = None
         self.ventana_menu = None
         self.ventana_cuenta_atras = None
         self.ventana_nuevo_evento = None
