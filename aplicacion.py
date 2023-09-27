@@ -1,4 +1,5 @@
 """Fichero que contiene la clase de la aplicación"""
+import sqlite3
 from tkinter import ttk
 from ventana_inicio_sesion import VentanaInicioSesion
 from ventana_menu import VentanaMenu

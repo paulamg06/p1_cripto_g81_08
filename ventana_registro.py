@@ -1,5 +1,6 @@
 """Fichero que contiene la ventana para el registro de usuarios"""
 import tkinter as tk
+import sqlite3 as sql
 
 class VentanaRegistro(tk.Toplevel):
     """Clase que configura la ventana para realizar el registro de usuario"""

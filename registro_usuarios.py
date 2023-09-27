@@ -1,4 +1,5 @@
 """Fichero que contiene el registro de los usuarios"""
+import sqlite3 as sql
 
 class RegistroUsuarios:
     """Clase que contiene el registro de los usuarios"""
@@ -14,7 +15,7 @@ class RegistroUsuarios:
                 return False
 
         #Añadimos el nuevo usuario a nuestra lista
-        self.usuarios.append((usuario, contrasena))
+        self.registrar_base_datos(usuario, contrasena)
         return True
 
     def verificar_credenciales(self, usuario, contrasena):
@@ -26,3 +27,20 @@ class RegistroUsuarios:
 
         #Si no ha encontrado coincidencias, es porque los parámetros no son correctos
         return False
+
+    def registrar_base_datos(self, usuario, contrasena):
+        """Método para registrar el usuario en la base de datos"""
+        #Conexion
+        conection = sql.connect("sqllite")
+        #Cursor
+        cursor = conection.cursor()
+
+        #Insertamos los datos
+        consulta = "INSERT INTO usuarios (nombre, contrasena) VALUES (?, ?)"
+        datos_usuario = (str(usuario), str(contrasena))
+
+        #Consulta
+        cursor.execute(consulta, datos_usuario)
+
+        #Confirmamos
+        conection.commit()
