@@ -8,24 +8,41 @@ class VentanaCuentaAtras(tk.Toplevel):
         self.app = app
 
         #Configuramos la ventana
-        self.title("Tus cuentas atrás")
+        self.title("Tus eventos")
         self.geometry("600x500")
+
+        self.info_eventos = {} #Diccionario con los textos de los eventos
 
         self.interfaz(self.app.usuario)
 
     def interfaz(self, usuario):
         """Método que configura la interfaz de la ventana"""
-
-        self.bienvenida = tk.Label(self, text=f"{usuario}. Tus eventos:")
+        #Encabezados
+        self.bienvenida = tk.Label(self, text="Tus cuentas atrás:")
         self.bienvenida.place(x=20, y=5)
 
-        self.titulo_c_a = tk.Label(self, text="Cuentas atrás:")
-        self.titulo_c_a.place(x=300, y=5)
-
-        #Estos textos se rellenan cuando se introduzcan nuevos eventos
-        self.app.info_evento.place(x=20, y=35)
-        self.app.info_cuenta_atras_evento.place(x=300, y=35)
+        #Información de los eventos y el encabezado
+        self.imprimir_eventos(usuario)
 
         #Boton para volver al menú principal
         self.menu_principal = tk.Button(self, text="Abrir menú principal", command=self.app.abrir_menu_principal)
         self.menu_principal.place(x=20, y=110)
+
+    def imprimir_eventos(self, usuario):
+        #Obtenemos la lista con todos los eventos del usuario
+        lista_eventos = self.app.gestion.obtener_eventos(usuario)
+        x_actual = 20
+        y_actual = 30
+
+        """El nombre del evento está en la posición 2,
+        la fecha del evento está en la posición 3 y
+        la cuenta atrás del evento está en la posición 4."""
+
+        #Recorremos los eventos
+        for evento in lista_eventos:
+            #Almacenamos cada texto en una entrada distinta del diccionario
+            self.info_eventos[evento[2]] = tk.Label(self, text=f"{evento[2]}, {evento[3]}. Queda {evento[4]}")
+            self.info_eventos[evento[2]].place(x=20, y=y_actual)
+
+            #Subimos la posición de la y
+            y_actual += 20

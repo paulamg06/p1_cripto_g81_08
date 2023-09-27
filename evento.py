@@ -2,11 +2,11 @@
 from datetime import datetime
 from cuenta_atras import CuentaAtras
 
-class Evento():
+class Evento:
     """Clase que almacena los eventos de los usuarios"""
     def __init__(self, nombre, fecha, hora):
-        self.__nombre = nombre
-        self.__fecha = self.paso_fecha(fecha, hora)
+        self.nombre = nombre
+        self.fecha = self.paso_fecha(fecha, hora)
         self.cuenta_atras = self.hacer_cuenta_atras()
 
     def paso_fecha(self, fecha, hora):
@@ -14,8 +14,7 @@ class Evento():
         date = fecha + ", " + hora
         return datetime.strptime(date, '%d-%m-%Y, %H:%M')
 
-
-    def calculo_años(self, days):
+    def calculo_anios(self, days):
         """Función que calcula los años"""
         return days % 365
 
@@ -30,28 +29,17 @@ class Evento():
         """Función que hace la cuenta atrás del evento"""
         #Obtenemos la fecha actual
         fecha_actual = datetime.now()
-        diferencia = self.__fecha - fecha_actual
+        diferencia = self.fecha - fecha_actual
 
+        #Si es negativo, no deja
+        if diferencia.days < 0 or diferencia.seconds < 0:
+            return None
+
+        #Si queda más de 1 año, se muestra como +1
         if diferencia.days > 365:
-            years = self.calculo_años(diferencia.days)
-        else:
-            years = 0
-            hours, minutes = self.paso_unidades_hora(diferencia.seconds)
+            years = self.calculo_anios(diferencia.days)
+            return str(CuentaAtras(years, None, None, None))
 
-        if years == 0:
-            return str(CuentaAtras(None, diferencia.days, hours, minutes))
-
-        return str(CuentaAtras(years, None, None, None))
-
-
-    @property
-    def nombre(self):
-        return self.__nombre
-
-    @property
-    def fecha(self):
-        return self.__fecha
-
-    @property
-    def hora(self):
-        return self.__hora
+        #Si queda menos de 1 año, se muestra toda la info
+        hours, minutes = self.paso_unidades_hora(diferencia.seconds)
+        return str(CuentaAtras(None, diferencia.days, hours, minutes))

@@ -1,5 +1,6 @@
 """Fichero que contiene el registro de los usuarios"""
 import sqlite3 as sql
+from tkinter import messagebox
 
 class RegistroUsuarios:
     """Clase que contiene el registro de los usuarios"""
@@ -8,10 +9,12 @@ class RegistroUsuarios:
         self.cursor = self.connection.cursor()
         self.usuarios = [] #Lista que almacena los usuarios que se registran
 
-        self.cursor.execute('''CREATE TABLE IF NOT EXISTS usuarios (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        self.cursor.execute('''
+        CREATE TABLE IF NOT EXISTS usuarios 
+        (id INTEGER PRIMARY KEY AUTOINCREMENT,
         usuario TEXT NOT NULL,
-        contrasena TEXT NOT NULL)''')
+        contrasena TEXT NOT NULL)
+        ''')
 
         self.connection.commit()
 
@@ -23,7 +26,7 @@ class RegistroUsuarios:
             self.connection.commit()
             return True
         except sql.Error as exception:
-            print("Error al agregar usuario:", str(exception))
+            messagebox.showerror("Error", "Error al agregar usuario:" + str(exception))
             return False
 
     def verificar_credenciales(self, usuario, contrasena):

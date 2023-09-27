@@ -42,7 +42,7 @@ class VentanaInicioSesion(tk.Toplevel):
 
         #Inicio de sesión correcto
         if self.registro.verificar_credenciales(usuario, contrasena):
-            messagebox.showinfo("Inicio de sesión correcto", "Bienvenido, " + usuario)
+            messagebox.showinfo("Éxito", "Inicio de sesión correcto")
             #Guardamos el usuario
             self.app.usuario = usuario
             #Pasamos a la siguiente ventana
@@ -50,7 +50,7 @@ class VentanaInicioSesion(tk.Toplevel):
             self.destroy()
 
         else:
-            messagebox.showerror("Inicio de sesión incorrecto", "Usuario y/o contraseña no válido/s")
+            messagebox.showerror("Inicio de sesión incorrecto", "Usuario y/o contraseña incorrecto/s")
 
     def registrar_usuario(self):
         """Método que abre la ventana para registrar el usuario"""

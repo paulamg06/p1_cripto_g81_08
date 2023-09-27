@@ -8,7 +8,7 @@ class CuentaAtras:
         self.minutes = minutes
 
     def __str__(self):
-        # Si los años no es None, entonces imprimios que queda +years años
+        # Si los años no es None, entonces imprimimos que queda +years años
         if self.years:
             return "+" + str(self.years) + " años."
 

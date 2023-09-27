@@ -1,6 +1,6 @@
 """Fichero que contiene la ventana para el registro de usuarios"""
 import tkinter as tk
-import sqlite3 as sql
+from tkinter import messagebox
 
 class VentanaRegistro(tk.Toplevel):
     """Clase que configura la ventana para realizar el registro de usuario"""
@@ -22,8 +22,9 @@ class VentanaRegistro(tk.Toplevel):
         #Cuadros
         self.cuadro_usuario = tk.Entry(self)
         self.cuadro_contrasena = tk.Entry(self, show="*")
-        #Boton de registro
+        #Botones
         self.boton_registro = tk.Button(self, text="Registrarse", command=self.registrar_usuario)
+        self.boton_inicio = tk.Button(self, text="Volver al inicio de sesión", command=self.app.abrir_inicio_sesion)
 
         #Posicionamos los elementos
         self.texto_usuario.pack()
@@ -31,6 +32,7 @@ class VentanaRegistro(tk.Toplevel):
         self.texto_contrasena.pack()
         self.cuadro_contrasena.pack()
         self.boton_registro.pack()
+        self.boton_inicio.pack()
 
     def registrar_usuario(self):
         """Método asociado al botón para registrar al usuario"""
@@ -40,8 +42,8 @@ class VentanaRegistro(tk.Toplevel):
 
         #Comprobamos que no exista el usuario
         if self.registro.agregar_usuario(usuario, contrasena):
-            print("Registro exitoso")
+            messagebox.showinfo("Éxito", "Se ha registrado correctamente al usuario")
             self.app.abrir_inicio_sesion()
             self.destroy() #Salimos de la ventana
         else:
-            print("El usuario ya existe")
+            messagebox.showerror("Error", "El usuario ya existe")

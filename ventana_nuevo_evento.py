@@ -51,50 +51,6 @@ class VentanaNuevoEvento(tk.Toplevel):
         self.menu_principal = tk.Button(self, text="Abrir menú principal", command=self.app.abrir_menu_principal)
         self.menu_principal.place(x=250, y=160)
 
-    def comprobar_fecha(self, fecha: str):
-        """Función que verifica que la fecha está en el formato correcto (dd-mm-aaaa)"""
-
-        if len(fecha) != 10:
-            raise Exception("El formato de la fecha es dd-mm-aaaa")
-
-        # Verificamos el año
-        year = int(fecha[6:])
-        # print(year)
-        if year < 0:
-            raise Exception("Introduce un año válido")
-
-        # Verificamos el mes
-        month = int(fecha[3:5])
-        # print(month)
-        if month < 1 or month > 12:
-            raise Exception("Introduce un mes válido")
-
-        if month == 2:
-            limite_dias = 28
-        elif month == 1 or month == 3 or month == 5 or month == 7 or month == 8 or month == 10 or month == 12:
-            limite_dias = 31
-        else:
-            limite_dias = 30
-
-        # Verificamos el dia
-        dia = int(fecha[:2])
-        # print(dia)
-        if dia < 1 or dia > limite_dias:
-            raise Exception("Introduce un dia válido")
-
-    def comprobar_hora(self, hora: str):
-        """Función que verifica que está en el formato correcto (HH:MM)"""
-
-        if len(hora) != 5:
-            raise Exception("El formato de hora debe ser hh:mm")
-
-        hour = int(hora[:2])
-        if hour < 0 or hour > 23:
-            raise Exception("Introduce una hora válida")
-
-        minute = int(hora[3:])
-        if minute < 0 or minute > 59:
-            raise Exception("Introduce unos minutos válidos")
 
     def crear_nuevo_evento(self):
         """Función que crea una nueva instancia evento"""
@@ -106,21 +62,11 @@ class VentanaNuevoEvento(tk.Toplevel):
         if not nombre or not fecha:
             return None
 
-        # Comprobamos el formato de la fecha
-        self.comprobar_fecha(fecha)
-
         # La hora por defecto es 9:00
         if not hora:
-            self.app.eventos.append(Evento(nombre, fecha, "9:00"))
+            nuevo_evento = Evento(nombre, fecha, "9:00")
         else:
-            # Comprobamos el formato de la hora
-            self.comprobar_hora(hora)
-            self.app.eventos.append(Evento(nombre, fecha, hora))
+            nuevo_evento = Evento(nombre, fecha, hora)
 
-        # Guardamos la cuenta atrás
-        self.app.cuenta_atras.append(self.app.eventos[self.app.contador].cuenta_atras)
+        self.app.gestion.crear_evento(nuevo_evento, self.app.usuario)
 
-        self.app.info_evento.config(text=f"{self.app.eventos[self.app.contador].nombre}: {self.app.eventos[self.app.contador].fecha}")
-        self.app.info_cuenta_atras_evento.config(text=self.app.cuenta_atras[self.app.contador])
-
-        self.app.contador += 1

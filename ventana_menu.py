@@ -10,9 +10,13 @@ class VentanaMenu(tk.Toplevel):
         self.title("Menú de Selección")
         self.geometry("400x150")
 
+        #Texto del usuario
+        self.nombre_usuario = tk.Label(self, text=f"Bienvenido, {self.app.usuario}")
+        self.nombre_usuario.place(x=20, y=20)
+
         # Crear un contenedor Frame para los botones
         button_frame = tk.Frame(self)
-        button_frame.pack(padx=20, pady=20)  # Ajusta el espaciado exterior
+        button_frame.pack(padx=20, pady=40)  # Ajusta el espaciado exterior
 
         # Crear botones y organizarlos en columnas
         button1 = tk.Button(button_frame, text="Tus cuentas atrás", command=self.opcion_ca)
