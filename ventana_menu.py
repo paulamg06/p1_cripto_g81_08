@@ -17,7 +17,7 @@ class VentanaMenu(tk.Toplevel):
         # Crear botones y organizarlos en columnas
         button1 = tk.Button(button_frame, text="Tus cuentas atrás", command=self.opcion_ca)
         button2 = tk.Button(button_frame, text="Nuevo evento", command=self.opcion_nuevo_evento)
-        button3 = tk.Button(button_frame, text="Cerrar sesión", command=self.opcion_ca)
+        button3 = tk.Button(button_frame, text="Cerrar sesión", command=self.opcion_cerrar_sesion)
 
         button1.grid(row=0, column=0, padx=10, pady=10)
         button2.grid(row=0, column=1, padx=10, pady=10)
@@ -30,7 +30,13 @@ class VentanaMenu(tk.Toplevel):
         self.destroy()
 
     def opcion_nuevo_evento(self):
-        """Métodoo que pasa a la ventana de nuevo evento y destruye la ventana del menú"""
+        """Método que pasa a la ventana de nuevo evento y destruye la ventana del menú"""
         self.app.abrir_nuevo_evento()
+        self.app.ventana_menu = None
+        self.destroy()
+
+    def opcion_cerrar_sesion(self):
+        """Método que cierra la sesión"""
+        self.app.abrir_inicio_sesion()
         self.app.ventana_menu = None
         self.destroy()

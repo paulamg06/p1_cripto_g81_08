@@ -1,9 +1,11 @@
 """Fichero que contiene la clase de la aplicación"""
 from tkinter import ttk
-from ventana_inicio_sesion import LoginWindow
+from ventana_inicio_sesion import VentanaInicioSesion
 from ventana_menu import VentanaMenu
 from ventana_cuenta_atras import VentanaCuentaAtras
 from ventana_nuevo_evento import VentanaNuevoEvento
+from registro_usuarios import RegistroUsuarios
+from ventana_registro import VentanaRegistro
 
 """Recordatorio: ttk.Label para los textos, ttk.Entry para las cajas, ttk.Bottom para los botones.
 Siempre hay que poner el parent"""
@@ -16,7 +18,10 @@ class Aplicacion(ttk.Frame):
         # Le damos un titulo al programa
         self.root.title("Cuenta atras")
 
-        self.usuario = ""
+        #registro usuarios
+        self.registro = RegistroUsuarios()
+
+        self.usuario = "" #La variable se almacena en la clase de registro
         self.contador = 0
         self.eventos = []
         self.cuenta_atras = []
@@ -28,10 +33,15 @@ class Aplicacion(ttk.Frame):
         self.ventana_menu = None
         self.ventana_cuenta_atras = None
         self.ventana_nuevo_evento = None
+        self.ventana_registro_usuario = None
+        self.ventana_inicio_sesion = None
 
         #Ventana de inicio de sesion
-        self.inicio_sesion = LoginWindow(self)
+        self.abrir_inicio_sesion()
 
+    def abrir_inicio_sesion(self):
+        """Método que abre la ventana para el inicio de sesión"""
+        self.ventana_inicio_sesion = VentanaInicioSesion(self, self.registro)
 
     def abrir_menu_principal(self):
         """Método que se ejecuta tras un inicio de sesión correcto y llama a la ventana principal"""
@@ -62,3 +72,8 @@ class Aplicacion(ttk.Frame):
 
         # Abrimos la ventana de nuevo evento
         self.ventana_nuevo_evento = VentanaNuevoEvento(self)
+
+    def abrir_registro_usuario(self):
+        """Método que abre la ventana para registrar el usuario"""
+
+        self.ventana_registro_usuario = VentanaRegistro(self, self.registro)
