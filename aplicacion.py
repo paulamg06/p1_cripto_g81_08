@@ -1,13 +1,17 @@
 """Fichero que contiene la clase de la aplicación"""
-import sqlite3
+
 from tkinter import ttk
+
+from registro_usuarios import RegistroUsuarios
+from gestion_evento import GestionEventos
+
 from ventana_inicio_sesion import VentanaInicioSesion
 from ventana_menu import VentanaMenu
 from ventana_cuenta_atras import VentanaCuentaAtras
 from ventana_nuevo_evento import VentanaNuevoEvento
-from registro_usuarios import RegistroUsuarios
 from ventana_registro import VentanaRegistro
-from gestion_evento import GestionEventos
+from ventana_borrar_evento import VentanaBorrarEvento
+
 
 """Recordatorio: ttk.Label para los textos, ttk.Entry para las cajas, ttk.Bottom para los botones.
 Siempre hay que poner el parent"""
@@ -83,3 +87,11 @@ class Aplicacion(ttk.Frame):
         """Método que abre la ventana para registrar el usuario"""
 
         self.ventana_registro_usuario = VentanaRegistro(self, self.registro)
+
+
+    def abrir_borrar_evento(self):
+        """Método que abre la ventana para borrar un evento"""
+        if self.ventana_cuenta_atras:
+            self.ventana_cuenta_atras.destroy()
+
+        self.ventana_borrar_evento = VentanaBorrarEvento(self)

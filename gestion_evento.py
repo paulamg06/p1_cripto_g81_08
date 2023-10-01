@@ -31,8 +31,15 @@ class GestionEventos:
         """Método que obtiene todos los eventos del usuario"""
         self.cursor.execute("SELECT * FROM eventos WHERE usuario=?", (usuario,))
         eventos = self.cursor.fetchall()
-        print(eventos)
         return eventos
+
+    def borrar_evento(self, evento, usuario):
+        """Método que borra los eventos del usuario"""
+        # Insertamos en la tabla
+        self.cursor.execute("DELETE FROM eventos WHERE usuario=? AND nombre=? AND fecha=?",
+                            (usuario, evento[2], evento[3]))
+        self.connection.commit()  # Guardamos los cambios
+        messagebox.showinfo("Éxito", "Evento eliminado con éxito")
 
     def cerrar_conexion(self):
         self.connection.close()

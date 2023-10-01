@@ -44,7 +44,7 @@ class VentanaNuevoEvento(tk.Toplevel):
         self.cuadro_hora.place(x=170, y=90, width=50)
 
         'Botones'
-        self.introducir = tk.Button(self, text="Nuevo evento", command=self.crear_nuevo_evento)
+        self.introducir = tk.Button(self, text="Crear evento", command=self.crear_nuevo_evento)
         self.introducir.place(x=20, y=125)
 
         # Boton para volver al menú principal
@@ -69,4 +69,3 @@ class VentanaNuevoEvento(tk.Toplevel):
             nuevo_evento = Evento(nombre, fecha, hora)
 
         self.app.gestion.crear_evento(nuevo_evento, self.app.usuario)
-

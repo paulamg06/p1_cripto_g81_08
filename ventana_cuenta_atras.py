@@ -27,11 +27,13 @@ class VentanaCuentaAtras(tk.Toplevel):
         #Boton para volver al menú principal
         self.menu_principal = tk.Button(self, text="Abrir menú principal", command=self.app.abrir_menu_principal)
         self.menu_principal.place(x=20, y=110)
+        self.borrar_evento = tk.Button(self, text="Borrar un evento", command=self.app.abrir_borrar_evento)
+        self.borrar_evento.place(x=20, y=140)
+
 
     def imprimir_eventos(self, usuario):
         #Obtenemos la lista con todos los eventos del usuario
         lista_eventos = self.app.gestion.obtener_eventos(usuario)
-        x_actual = 20
         y_actual = 30
 
         """El nombre del evento está en la posición 2,
