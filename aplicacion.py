@@ -2,7 +2,7 @@
 
 from tkinter import ttk
 
-from registro_usuarios import RegistroUsuarios
+from gestion_usuarios import GestionUsuarios
 from gestion_evento import GestionEventos
 
 from ventana_inicio_sesion import VentanaInicioSesion
@@ -24,7 +24,7 @@ class Aplicacion(ttk.Frame):
         self.root.withdraw()
 
         #registro usuarios
-        self.registro = RegistroUsuarios(db_file)
+        self.registro = GestionUsuarios(db_file)
         self.gestion = GestionEventos(db_file)
 
         self.usuario = "" #La variable se almacena en la clase de registro

@@ -2,7 +2,7 @@
 import sqlite3 as sql
 from tkinter import messagebox
 
-class RegistroUsuarios:
+class GestionUsuarios:
     """Clase que contiene el registro de los usuarios"""
     def __init__(self, db_file):
         self.connection = sql.connect(db_file)
@@ -34,6 +34,18 @@ class RegistroUsuarios:
         self.cursor.execute("SELECT * FROM usuarios WHERE usuario=? AND contrasena=?", (usuario,contrasena))
         resultado = self.cursor.fetchone()
         return resultado is not None
+
+    def borrar_usuario(self, usuario):
+        """Método para borrar un usuario de la base de datos"""
+        # Verificamos que el usuario no exista
+        try:
+            self.cursor.execute("DELETE FROM usuarios WHERE usuario=?", (usuario))
+            self.connection.commit()
+            messagebox.showerror("Éxito", "Usuario eliminado con éxito")
+            return True
+        except sql.Error as exception:
+            messagebox.showerror("Error", "Error al eliminar el usuario:" + str(exception))
+            return False
 
     def cerrar_conexion(self):
         self.connection.close()

@@ -8,7 +8,7 @@ class VentanaMenu(tk.Toplevel):
         self.app = app
 
         self.title("Menú de Selección")
-        self.geometry("400x150")
+        self.geometry("400x200")
 
         #Texto del usuario
         self.nombre_usuario = tk.Label(self, text=f"Bienvenido, {self.app.usuario}")
@@ -22,10 +22,15 @@ class VentanaMenu(tk.Toplevel):
         button1 = tk.Button(button_frame, text="Tus cuentas atrás", command=self.opcion_ca)
         button2 = tk.Button(button_frame, text="Nuevo evento", command=self.opcion_nuevo_evento)
         button3 = tk.Button(button_frame, text="Cerrar sesión", command=self.opcion_cerrar_sesion)
+        button4 = tk.Button(button_frame, text="Salir de la aplicación", command=self.app.destroy)
+        button5 = tk.Button(button_frame, text="Borrar usuario", command=self.opcion_borrar_usuario)
+
 
         button1.grid(row=0, column=0, padx=10, pady=10)
         button2.grid(row=0, column=1, padx=10, pady=10)
         button3.grid(row=0, column=2, padx=10, pady=10)
+        button4.grid(row=1, column=0, padx=10, pady=10)
+        button5.grid(row=1, column=1, padx=10, pady=10)
 
     def opcion_ca(self):
         """Método que pasa a la ventana de cuentas atrás y destruye la ventana del menú"""
@@ -43,4 +48,10 @@ class VentanaMenu(tk.Toplevel):
         """Método que cierra la sesión"""
         self.app.abrir_inicio_sesion()
         self.app.ventana_menu = None
+        self.destroy()
+
+    def opcion_borrar_usuario(self):
+        """Método que borra el usuario actual"""
+        self.app.registro.borrar_usuario(self.app.usuario)
+        self.app.abrir_inicio_sesion()
         self.destroy()
