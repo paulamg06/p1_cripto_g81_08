@@ -39,7 +39,7 @@ class GestionUsuarios:
         """Método para borrar un usuario de la base de datos"""
         # Verificamos que el usuario no exista
         try:
-            self.cursor.execute("DELETE FROM usuarios WHERE usuario=?", (usuario))
+            self.cursor.execute("DELETE FROM usuarios WHERE usuario=?", [usuario])
             self.connection.commit()
             messagebox.showerror("Éxito", "Usuario eliminado con éxito")
             return True

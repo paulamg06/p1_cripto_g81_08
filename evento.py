@@ -16,7 +16,7 @@ class Evento:
 
     def calculo_anios(self, days):
         """Función que calcula los años"""
-        return days % 365
+        return days // 365
 
     def paso_unidades_hora(self, seconds):
         """Función que pasa los segundos a horas y minutos"""
