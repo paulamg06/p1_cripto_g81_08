@@ -35,6 +35,10 @@ class VentanaInicioSesion(tk.Toplevel):
         self.boton_registro = tk.Button(self, text="Registrar usuario", command=self.registrar_usuario)
         self.boton_registro.pack()
 
+        #Boton para salir de la aplicación
+        self.boton_salir = tk.Button(self, text="Salir", command=exit)
+        self.boton_salir.place(x=250, y=107)
+
     def iniciar_sesion(self):
         """Método que comprueba que la contraseña sea correcta"""
         usuario = self.cuadro_usuario.get()

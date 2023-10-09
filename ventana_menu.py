@@ -22,7 +22,7 @@ class VentanaMenu(tk.Toplevel):
         button1 = tk.Button(button_frame, text="Tus cuentas atrás", command=self.opcion_ca)
         button2 = tk.Button(button_frame, text="Nuevo evento", command=self.opcion_nuevo_evento)
         button3 = tk.Button(button_frame, text="Cerrar sesión", command=self.opcion_cerrar_sesion)
-        button4 = tk.Button(button_frame, text="Salir", command=exit)
+        button4 = tk.Button(button_frame, text="Cerrar aplicación", command=exit)
         button5 = tk.Button(button_frame, text="Borrar usuario", command=self.opcion_borrar_usuario)
 
 
