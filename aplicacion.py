@@ -2,15 +2,15 @@
 
 from tkinter import ttk
 
-from gestion_usuarios import GestionUsuarios
-from gestion_evento import GestionEventos
+from db.gestion_usuarios import GestionUsuarios
+from db.gestion_evento import GestionEventos
 
-from ventana_inicio_sesion import VentanaInicioSesion
-from ventana_menu import VentanaMenu
-from ventana_cuenta_atras import VentanaCuentaAtras
-from ventana_nuevo_evento import VentanaNuevoEvento
-from ventana_registro import VentanaRegistro
-from ventana_borrar_evento import VentanaBorrarEvento
+from ventanas.ventana_inicio_sesion import VentanaInicioSesion
+from ventanas.ventana_menu import VentanaMenu
+from ventanas.ventana_cuenta_atras import VentanaCuentaAtras
+from ventanas.ventana_nuevo_evento import VentanaNuevoEvento
+from ventanas.ventana_registro import VentanaRegistro
+from ventanas.ventana_borrar_evento import VentanaBorrarEvento
 
 
 """Recordatorio: ttk.Label para los textos, ttk.Entry para las cajas, ttk.Bottom para los botones.

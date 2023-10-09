@@ -1,6 +1,6 @@
 """Fichero que almacena los de los usuarios"""
 from datetime import datetime
-from cuenta_atras import CuentaAtras
+from objetos.cuenta_atras import CuentaAtras
 
 class Evento:
     """Clase que almacena los eventos de los usuarios"""

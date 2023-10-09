@@ -1,6 +1,6 @@
 """Fichero que contiene la ventana para los nuevos eventos"""
 import tkinter as tk
-from evento import Evento
+from objetos.evento import Evento
 
 class VentanaNuevoEvento(tk.Toplevel):
     """Clase que genera la ventana para crear nuevos eventos"""
