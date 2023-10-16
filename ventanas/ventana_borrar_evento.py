@@ -25,7 +25,12 @@ class VentanaBorrarEvento(tk.Toplevel):
         """Método que configura la ventana"""
         # Obtenemos la lista con todos los eventos del usuario
         lista_eventos = self.app.gestion.obtener_eventos(usuario, self.app.data_key)
-        y_actual = 30
+
+        #Boton para volver al menu principal
+        self.button_menu_principal = tk.Button(self, text="Atrás", command=self.salir)
+        self.button_menu_principal.place(x=20, y=20)
+
+        y_actual = 50
 
         """El nombre del evento está en la posición 2,
         la fecha del evento está en la posición 3 y
@@ -44,6 +49,10 @@ class VentanaBorrarEvento(tk.Toplevel):
     def borrar_evento(self):
         """Método que borra el evento"""
         self.app.gestion.borrar_evento(self.evento_actual, self.usuario, self.app.data_key)
-        #Cerramos la ventana después de haber borrado el evento
+
+
+    def salir(self):
+        """Método que sale de la ventana"""
+        # Cerramos la ventana después de haber borrado el evento
         self.app.abrir_cuenta_atras()
         self.destroy()

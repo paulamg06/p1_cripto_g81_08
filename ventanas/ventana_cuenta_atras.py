@@ -25,10 +25,10 @@ class VentanaCuentaAtras(tk.Toplevel):
         self.imprimir_eventos(usuario)
 
         #Boton para volver al menú principal
-        self.menu_principal = tk.Button(self, text="Abrir menú principal", command=self.app.abrir_menu_principal)
-        self.menu_principal.place(x=20, y=110)
+        self.menu_principal = tk.Button(self, text="Volver atrás", command=self.app.abrir_menu_principal)
+        self.menu_principal.place(x=20, y=420)
         self.borrar_evento = tk.Button(self, text="Borrar un evento", command=self.app.abrir_borrar_evento)
-        self.borrar_evento.place(x=20, y=140)
+        self.borrar_evento.place(x=20, y=450)
 
 
     def imprimir_eventos(self, usuario):
