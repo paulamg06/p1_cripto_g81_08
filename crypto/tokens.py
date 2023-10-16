@@ -19,4 +19,4 @@ class Tokens:
 
     def verificar(self, key):
         """Método para verificar que la contraseña introducida sea la misma"""
-        return self.kdf.verify(self.password, key)
+        return key == self.key

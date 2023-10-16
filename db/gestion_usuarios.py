@@ -14,17 +14,17 @@ class GestionUsuarios:
         self.cursor = self.connection.cursor()
         self.usuarios = []  # Lista que almacena los usuarios que se registran
 
-        self.cursor.execute('''
-                REMOVE TABLE usuarios 
-                ''')
-
         """self.cursor.execute('''
+                DROP TABLE usuarios 
+                ''')"""
+
+        self.cursor.execute('''
         CREATE TABLE IF NOT EXISTS usuarios 
         (id INTEGER PRIMARY KEY AUTOINCREMENT,
         usuario TEXT NOT NULL,
         token TEXT NOT NULL,
         salt TEXT NOT NULL)
-        ''')"""
+        ''')
 
         self.connection.commit()
 
@@ -55,6 +55,9 @@ class GestionUsuarios:
         # verificamos el token
         self.cursor.execute("SELECT token, salt FROM usuarios WHERE usuario=?", [usuario])
         resultado = self.cursor.fetchone()
+
+        if resultado is None:
+            return False
 
         key_ascii = resultado[0]
         key_b64 = bytes(key_ascii, 'ascii')
