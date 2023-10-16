@@ -14,7 +14,8 @@ class GestionUsuarios:
         CREATE TABLE IF NOT EXISTS usuarios 
         (id INTEGER PRIMARY KEY AUTOINCREMENT,
         usuario TEXT NOT NULL,
-        token TEXT NOT NULL)
+        token TEXT NOT NULL,
+        salt TEXT NOT NULL)
         ''')
 
         self.connection.commit()
@@ -24,7 +25,7 @@ class GestionUsuarios:
         try:
             #primero derivamos la contraseña
             token = Tokens(contrasena)
-            self.cursor.execute("INSERT INTO usuarios (usuario,token) VALUES (?,?)", (usuario,token.key))
+            self.cursor.execute("INSERT INTO usuarios (usuario,token,salt) VALUES (?,?,?)", (usuario,token.key,token.salt))
             self.connection.commit()
             return True
         except sql.Error as exception:

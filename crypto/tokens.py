@@ -3,12 +3,12 @@
 import os
 from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
 
-salt = os.urandom(16)
 
 class Tokens:
     def __init__(self, password):
+        self.salt = os.urandom(16)
         self.kdf = Scrypt(
-            salt=salt,
+            salt=self.salt,
             length=32,
             n=2**14,
             r=8,
