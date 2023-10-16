@@ -1,14 +1,12 @@
 """Fichero que contiene la creación de tokens para las contraseñas"""
-
-import os
 from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
 
 
 class Tokens:
-    def __init__(self, password):
-        self.salt = os.urandom(16)
+    def __init__(self, password, salt):
+        self.password = password
         self.kdf = Scrypt(
-            salt=self.salt,
+            salt=salt,
             length=32,
             n=2**14,
             r=8,
@@ -16,9 +14,9 @@ class Tokens:
             )
 
         #derivamos la clave
-        self.key = self.kdf.derive(bytes(password, 'utf-8'))
+        self.key = self.kdf.derive(bytes(self.password, 'utf-8'))
 
 
-    def verificar(self, password):
+    def verificar(self, key):
         """Método para verificar que la contraseña introducida sea la misma"""
-        self.kdf.verify(password, self.key)
+        return self.kdf.verify(self.password, key)

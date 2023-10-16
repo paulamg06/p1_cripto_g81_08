@@ -1,5 +1,6 @@
 """Fichero que contiene el registro de los usuarios"""
 import base64
+import os
 import sqlite3 as sql
 from tkinter import messagebox
 from crypto.tokens import Tokens
@@ -31,11 +32,13 @@ class GestionUsuarios:
         """Método que regitra a los usuarios añadiéndolos a la lista de usuarios"""
         try:
             # primero derivamos la contraseña
-            token = Tokens(contrasena)
+            salt = os.urandom(16)
+
+            token = Tokens(contrasena, salt)
             key_b64 = base64.b64encode(token.key)
             key_ascii = key_b64.decode()
 
-            salt_b64 = base64.b64encode(token.salt)
+            salt_b64 = base64.b64encode(salt)
             salt_ascii = salt_b64.decode()
 
             self.cursor.execute("INSERT INTO usuarios (usuario,token,salt) VALUES (?,?,?)",
@@ -48,12 +51,21 @@ class GestionUsuarios:
 
     def verificar_credenciales(self, usuario, contrasena):
         """Método que verifica el inicio de sesión del usuario"""
-        # derivamos la contraseña
-        token = Tokens(contrasena)
+
         # verificamos el token
-        self.cursor.execute("SELECT * FROM usuarios WHERE usuario=? AND token=?", (usuario, token.key))
+        self.cursor.execute("SELECT token, salt FROM usuarios WHERE usuario=?", [usuario])
         resultado = self.cursor.fetchone()
-        return resultado is not None
+
+        key_ascii = resultado[0]
+        key_b64 = bytes(key_ascii, 'ascii')
+        key = base64.b64decode(key_b64)
+
+        salt_ascii = resultado[1]
+        salt_b64 = bytes(salt_ascii, 'ascii')
+        salt = base64.b64decode(salt_b64)
+
+        token = Tokens(contrasena, salt)
+        return token.verificar(key)
 
     def borrar_usuario(self, usuario):
         """Método para borrar un usuario de la base de datos"""
