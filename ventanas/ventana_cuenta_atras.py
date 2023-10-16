@@ -33,7 +33,7 @@ class VentanaCuentaAtras(tk.Toplevel):
 
     def imprimir_eventos(self, usuario):
         #Obtenemos la lista con todos los eventos del usuario
-        lista_eventos = self.app.gestion.obtener_eventos(usuario)
+        lista_eventos = self.app.gestion.obtener_eventos(usuario, self.app.data_key)
         y_actual = 30
 
         """El nombre del evento está en la posición 2,
@@ -43,8 +43,8 @@ class VentanaCuentaAtras(tk.Toplevel):
         #Recorremos los eventos
         for evento in lista_eventos:
             #Almacenamos cada texto en una entrada distinta del diccionario
-            self.info_eventos[evento[2]] = tk.Label(self, text=f"{evento[2]}, {evento[3]}. Queda {evento[4]}")
-            self.info_eventos[evento[2]].place(x=20, y=y_actual)
+            self.info_eventos[evento[0]] = tk.Label(self, text=f"{evento[0]}, {evento[1]}. Queda {evento[2]}")
+            self.info_eventos[evento[0]].place(x=20, y=y_actual)
 
             #Subimos la posición de la y
             y_actual += 20

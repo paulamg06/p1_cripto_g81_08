@@ -49,6 +49,7 @@ class VentanaInicioSesion(tk.Toplevel):
             messagebox.showinfo("Éxito", "Inicio de sesión correcto")
             #Guardamos el usuario
             self.app.usuario = usuario
+            self.app.data_key = self.registro.obtener_data_key(usuario, contrasena)
             #Pasamos a la siguiente ventana
             self.app.abrir_menu_principal()
             self.destroy()

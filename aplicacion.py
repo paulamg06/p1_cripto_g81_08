@@ -28,6 +28,7 @@ class Aplicacion(ttk.Frame):
         self.gestion = GestionEventos(db_file)
 
         self.usuario = "" #La variable se almacena en la clase de registro
+        self.data_key = ""
 
         #Textos que se van a modificar en cuanto se añadan eventos
         self.info_evento = ttk.Label(self, text="")

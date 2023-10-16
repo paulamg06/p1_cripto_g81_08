@@ -68,4 +68,4 @@ class VentanaNuevoEvento(tk.Toplevel):
         else:
             nuevo_evento = Evento(nombre, fecha, hora)
 
-        self.app.gestion.crear_evento(nuevo_evento, self.app.usuario)
+        self.app.gestion.crear_evento(nuevo_evento, self.app.usuario, self.app.data_key)
