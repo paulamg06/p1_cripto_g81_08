@@ -13,4 +13,4 @@ class CuentaAtras:
             return "+" + str(self.years) + " años."
 
         # En caso contrario
-        return str(self.days) + "días, " + str(self.hours) + " horas, " + str(self.minutes) + " minutos."
+        return str(self.days) + " días, " + str(self.hours) + " horas, " + str(self.minutes) + " minutos."

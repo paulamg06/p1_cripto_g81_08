@@ -3,7 +3,6 @@ import base64
 import os
 import sqlite3 as sql
 from tkinter import messagebox
-from crypto.tokens import Tokens
 from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
 
 
@@ -22,11 +21,11 @@ class GestionEventos:
             CREATE TABLE IF NOT EXISTS eventos 
             (id INTEGER PRIMARY KEY AUTOINCREMENT,
                 usuario TEXT NOT NULL,
-                nombre_cifrado TEXT NOT NULL,
+                nombre_cifrado BLOB NOT NULL,
                 nonce_nombre TEXT NOT NULL,
-                fecha_cifrada TEXT NOT NULL,
+                fecha_cifrada BLOB NOT NULL,
                 nonce_fecha TEXT NOT NULL,
-                cuenta_atras_cifrada TEXT NOT NULL,
+                cuenta_atras_cifrada BLOB NOT NULL,
                 nonce_c_a TEXT NOT NULL)
         ''')
         self.connection.commit()  # Guardamos los cambios
