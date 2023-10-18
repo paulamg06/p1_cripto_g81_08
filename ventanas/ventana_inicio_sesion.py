@@ -55,7 +55,7 @@ class VentanaInicioSesion(tk.Toplevel):
             self.destroy()
 
         else:
-            messagebox.showerror("Inicio de sesión incorrecto", "Usuario y/o contraseña incorrecto/s")
+            messagebox.showerror("Inicio de sesión incorrecto", "Usuario no registrado")
 
     def registrar_usuario(self):
         """Método que abre la ventana para registrar el usuario"""

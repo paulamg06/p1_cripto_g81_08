@@ -37,7 +37,9 @@ class GestionUsuarios:
             salt_deriv_key = os.urandom(16)
 
             token = Tokens(contrasena, salt)
-            key_b64 = base64.b64encode(token.key)
+            key = token.derivar()
+
+            key_b64 = base64.b64encode(key)
             key_ascii = key_b64.decode()
 
             salt_b64 = base64.b64encode(salt)
@@ -62,7 +64,7 @@ class GestionUsuarios:
         resultado = self.cursor.fetchone()
 
         if resultado is None:
-            return None
+            return False
 
         key_ascii = resultado[0]
         key_b64 = bytes(key_ascii, 'ascii')
@@ -73,7 +75,8 @@ class GestionUsuarios:
         salt = base64.b64decode(salt_b64)
 
         token = Tokens(contrasena, salt)
-        return token.verificar(key)
+        token.verificar(key)
+        return True
 
     def obtener_data_key(self, usuario, contrasena):
         self.cursor.execute("SELECT salt_deriv_key FROM usuarios WHERE usuario=?", [usuario])
@@ -82,7 +85,7 @@ class GestionUsuarios:
         salt_deriv_key_b64 = bytes(salt_deriv_key_ascii, 'ascii')
         salt_deriv_key = base64.b64decode(salt_deriv_key_b64)
 
-        data_key = Tokens(contrasena, salt_deriv_key).key
+        data_key = Tokens(contrasena, salt_deriv_key).derivar()
         return data_key
 
     def borrar_usuario(self, usuario):

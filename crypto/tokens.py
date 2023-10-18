@@ -13,10 +13,10 @@ class Tokens:
             p=1,
             )
 
-        #derivamos la clave
-        self.key = self.kdf.derive(bytes(self.password, 'utf-8'))
-
+    #derivamos la clave
+    def derivar(self):
+        return self.kdf.derive(bytes(self.password, 'utf-8'))
 
     def verificar(self, key):
         """Método para verificar que la contraseña introducida sea la misma"""
-        return key == self.key
+        self.kdf.verify(bytes(self.password, 'utf-8'), key)
