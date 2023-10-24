@@ -3,7 +3,8 @@ import base64
 import os
 import sqlite3 as sql
 from tkinter import messagebox
-from crypto.tokens import Tokens
+from crypto.kdf import Kdf
+from crypto.token import Token
 
 
 class GestionUsuarios:
@@ -32,24 +33,14 @@ class GestionUsuarios:
     def agregar_usuario(self, usuario, contrasena):
         """Método que regitra a los usuarios añadiéndolos a la lista de usuarios"""
         try:
-            # primero derivamos la contraseña
+            # creamos un salt para el token
             salt = os.urandom(16)
-            salt_deriv_key = os.urandom(16)
 
-            token = Tokens(contrasena, salt)
-            key = token.derivar()
+            token = Token(contrasena, salt)
 
-            key_b64 = base64.b64encode(key)
-            key_ascii = key_b64.decode()
-
-            salt_b64 = base64.b64encode(salt)
-            salt_ascii = salt_b64.decode()
-
-            salt_deriv_key_b64 = base64.b64encode(salt_deriv_key)
-            salt_deriv_key_ascii = salt_deriv_key_b64.decode()
-
+            # guardamos en la bd
             self.cursor.execute("INSERT INTO usuarios (usuario,token,salt,salt_deriv_key) VALUES (?,?,?,?)",
-                                (usuario, key_ascii, salt_ascii, salt_deriv_key_ascii))
+                                (usuario, token.key_ascii, token.salt_ascii, token.salt_deriv_key_ascii))
             self.connection.commit()
             return True
         except sql.Error as exception:
@@ -59,13 +50,14 @@ class GestionUsuarios:
     def verificar_credenciales(self, usuario, contrasena):
         """Método que verifica el inicio de sesión del usuario"""
 
-        # verificamos el token
+        # recuperamos el token con su salt
         self.cursor.execute("SELECT token, salt FROM usuarios WHERE usuario=?", [usuario])
         resultado = self.cursor.fetchone()
 
         if resultado is None:
             return False
 
+        # decodificamos el token y el salt
         key_ascii = resultado[0]
         key_b64 = bytes(key_ascii, 'ascii')
         key = base64.b64decode(key_b64)
@@ -74,8 +66,10 @@ class GestionUsuarios:
         salt_b64 = bytes(salt_ascii, 'ascii')
         salt = base64.b64decode(salt_b64)
 
-        token = Tokens(contrasena, salt)
-        token.verificar(key)
+        # verificamos la contraseña
+        kdf = Kdf(salt)
+        kdf.scrypt.verify(bytes(contrasena, 'utf-8'), key)
+
         return True
 
     def obtener_data_key(self, usuario, contrasena):
@@ -85,11 +79,12 @@ class GestionUsuarios:
         salt_deriv_key_b64 = bytes(salt_deriv_key_ascii, 'ascii')
         salt_deriv_key = base64.b64decode(salt_deriv_key_b64)
 
-        data_key = Tokens(contrasena, salt_deriv_key).derivar()
+        data_key = Kdf(salt_deriv_key)
+        data_key.scrypt.derive(bytes(contrasena, 'utf-8'))
         return data_key
 
     def borrar_usuario(self, usuario):
-        """Método para borrar un usuario de la base de datos"""
+        """Método para borrar un usuario y sus eventos de la base de datos"""
         # Verificamos que el usuario no exista
         try:
             self.cursor.execute("DELETE FROM usuarios WHERE usuario=?", [usuario])
