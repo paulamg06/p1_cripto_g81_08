@@ -73,6 +73,7 @@ class GestionUsuarios:
         return True
 
     def obtener_data_key(self, usuario, contrasena):
+        """Método que obtiene la clave derivada"""
         self.cursor.execute("SELECT salt_deriv_key FROM usuarios WHERE usuario=?", [usuario])
         resultado = self.cursor.fetchone()
         salt_deriv_key_ascii = resultado[0]
