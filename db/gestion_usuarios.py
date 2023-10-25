@@ -81,8 +81,7 @@ class GestionUsuarios:
         salt_deriv_key = base64.b64decode(salt_deriv_key_b64)
 
         data_key = Kdf(salt_deriv_key)
-        data_key.scrypt.derive(bytes(contrasena, 'utf-8'))
-        return data_key
+        return data_key.scrypt.derive(bytes(contrasena, 'utf-8'))
 
     def borrar_usuario(self, usuario):
         """Método para borrar un usuario y sus eventos de la base de datos"""
