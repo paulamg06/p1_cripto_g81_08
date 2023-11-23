@@ -1,5 +1,6 @@
 """Fichero que contiene las funciones para la parte de la firma"""
 import os
+import pickle
 import string
 from random import random
 from db.gestion_evento import GestionEventos
@@ -65,10 +66,10 @@ def serialization():
         pub_key_file.write(pub_pem)
 
 
-def deserialization():
+def cargar_pub_key():
     """Función que deserializa la clave publica"""
-    key = load_pem_public_key(public_pem_data)
-    return isinstance(key, rsa.RSAPublicKey)
+    with open("pub_key.pem", "rb") as pub_key_file:
+        return load_pem_public_key(pub_key_file.read())
 
 
 def firmar(db_file, usuario, data_key):
@@ -92,22 +93,38 @@ def firmar(db_file, usuario, data_key):
         ),
         hashes.SHA256()
     )
-    guardar_firma(signature)
+    guardar_firma(signature, message)
 
 
-def guardar_firma(signature):
+def guardar_firma(signature, b64_message):
     """Función que guarda la firma"""
+    # Crea un diccionario con la firma y el mensaje
+    firma = {
+        "signature" : signature,
+        "b64_message" : b64_message
+    }
+
+    # Guarda el diccionario en un fichero
     with open("firma.sig", "wb") as signature_file:
-        signature_file.write(signature)
+        pickle.dump(firma, signature_file)
 
 
-def verificar_firma(signature, b64_message):
+def cargar_firma():
+    """Función que carga y devuelve la firma y el mensaje correspondiente"""
+    with open("firma.sig", "rb") as signature_file:
+        firma = pickle.load(signature_file)
+
+    return firma["signature"], firma["b64_message"]
+
+
+def verificar_firma():
     """Función que verifica la firma"""
-    # Carga la clave privada
+    # Carga las claves
     private_key = cargar_priv_key()
-
-    # Carga la clave publica
     public_key = private_key.public_key()
+
+    # Carga la firma y el mensaje
+    signature, b64_message = cargar_firma()
 
     # Verifica la clave publica
     public_key.verify(
