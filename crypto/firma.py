@@ -112,6 +112,7 @@ def guardar_firma(signature, b64_message, certificado=None):
 
 def cargar_firma():
     """Función que carga y devuelve la firma y el mensaje correspondiente"""
+
     with open("firma.sig", "rb") as signature_file:
         firma = pickle.load(signature_file)
 
