@@ -2,31 +2,12 @@
 import os
 import pickle
 import string
-from random import random
+import random
 from db.gestion_evento import GestionEventos
 
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
-
-
-def save_priv_key():
-    """Función que serializa y guarda la clave privada"""
-    # Genera la clave privada
-    private_key = rsa.generate_private_key(
-        public_exponent=65537,
-        key_size=2048,
-    )
-
-    # Serializa la clave privada y la guarda
-    priv_pem = private_key.private_bytes(
-        encoding=serialization.Encoding.PEM,
-        format=serialization.PrivateFormat.PKCS8,
-        encryption_algorithm=serialization.BestAvailableEncryption(bytes(generar_contrasena(), 'ascii'))
-    )
-    with open("priv_key.pem", "wb") as priv_key_file:
-        priv_key_file.write(priv_pem)
-
 
 def generar_contrasena():
     """Función que genera una contraseña a partir de variables de entorno"""
@@ -41,16 +22,36 @@ def generar_contrasena():
     return ''.join(random.choice(char) for _ in range(width))
 
 
+def save_priv_key():
+    """Función que serializa y guarda la clave privada"""
+    print("Hola")
+    # Genera la clave privada
+    private_key = rsa.generate_private_key(
+        public_exponent=65537,
+        key_size=2048,
+    )
+
+    # Serializa la clave privada y la guarda
+    priv_pem = private_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.BestAvailableEncryption(bytes(generar_contrasena(), 'ascii'))
+    )
+    with open("../ficheros/priv_key.pem", "wb") as priv_key_file:
+        priv_key_file.write(priv_pem)
+
+    print("Hola")
+
 def cargar_priv_key():
     """Función que carga una clave privada a partir de un archivo"""
-    with open("priv_key.pem", "rb") as key_file:
+    with open("../ficheros/priv_key.pem", "rb") as key_file:
         return serialization.load_pem_private_key(
             key_file.read(),
             password=bytes(generar_contrasena(), 'ascii')
         )
 
 
-def serialization():
+def save_pub_key():
     """Función que serializa las claves y las guarda en un .pem"""
     private_key = cargar_priv_key()
 
@@ -62,13 +63,13 @@ def serialization():
         encoding=serialization.Encoding.PEM,
         format=serialization.PublicFormat.SubjectPublicKeyInfo
     )
-    with open("pub_key.pem", "wb") as pub_key_file:
+    with open("../ficheros/pub_key.pem", "wb") as pub_key_file:
         pub_key_file.write(pub_pem)
 
 
 def cargar_pub_key():
     """Función que deserializa la clave publica"""
-    with open("pub_key.pem", "rb") as pub_key_file:
+    with open("../ficheros/pub_key.pem", "rb") as pub_key_file:
         return load_pem_public_key(pub_key_file.read())
 
 
@@ -106,14 +107,14 @@ def guardar_firma(signature, b64_message, certificado=None):
     }
 
     # Guarda el diccionario en un fichero
-    with open("firma.sig", "wb") as signature_file:
+    with open("../ficheros/firma.sig", "wb") as signature_file:
         pickle.dump(firma, signature_file)
 
 
 def cargar_firma():
     """Función que carga y devuelve la firma y el mensaje correspondiente"""
 
-    with open("firma.sig", "rb") as signature_file:
+    with open("../ficheros/firma.sig", "rb") as signature_file:
         firma = pickle.load(signature_file)
 
     return firma["signature"], firma["b64_message"]
@@ -138,3 +139,7 @@ def verificar_firma():
         ),
         hashes.SHA256()
     )
+
+if __name__ == '__main__':
+    save_priv_key()
+    save_pub_key()
