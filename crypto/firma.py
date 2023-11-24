@@ -59,8 +59,8 @@ def serialization():
 
     # Serializa la clave publica y la guarda
     pub_pem = public_key.public_bytes(
-        encoding = serialization.Encoding.PEM,
-        format = serialization.PublicFormat.SubjectPublicKeyInfo
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo
     )
     with open("pub_key.pem", "wb") as pub_key_file:
         pub_key_file.write(pub_pem)
@@ -96,12 +96,13 @@ def firmar(db_file, usuario, data_key):
     guardar_firma(signature, message)
 
 
-def guardar_firma(signature, b64_message):
+def guardar_firma(signature, b64_message, certificado=None):
     """Función que guarda la firma"""
     # Crea un diccionario con la firma y el mensaje
     firma = {
-        "signature" : signature,
-        "b64_message" : b64_message
+        "signature": signature,
+        "b64_message": b64_message,  ## También hay que guardar el certificado
+        "certificado": certificado
     }
 
     # Guarda el diccionario en un fichero
@@ -120,8 +121,8 @@ def cargar_firma():
 def verificar_firma():
     """Función que verifica la firma"""
     # Carga las claves
-    private_key = cargar_priv_key()
-    public_key = private_key.public_key()
+    private_key = cargar_priv_key()  ## Sobra
+    public_key = private_key.public_key()  ## Del certificado
 
     # Carga la firma y el mensaje
     signature, b64_message = cargar_firma()
