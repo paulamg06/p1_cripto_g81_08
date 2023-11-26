@@ -32,15 +32,15 @@ def crear_csr():
     with open("../ficheros/csr.pem", "wb") as csr_file:
         csr_file.write(csr.public_bytes(serialization.Encoding.PEM))
 
-def cargar_certificado():
+def cargar_certificado(file):
     """Función que carga el certificado guardado"""
+    file_path = "ficheros/" + str(file)
     # Abre el certificado
-    with open("../ficheros/Acert2.pem") as cert_file:
+    with open(file_path, "rb") as cert_file:
         pem_data = cert_file.read()
 
     # Devuelve el certificado
-    certf = x509.load_pem_x509_certificate(bytes(pem_data, 'utf-8'))
-    print(certf.public_key())
+    cert_pem = x509.load_pem_x509_certificate(pem_data)
 
-if __name__ == '__main__':
-    cargar_certificado()
+    return cert_pem.public_bytes(encoding=serialization.Encoding.PEM)
+

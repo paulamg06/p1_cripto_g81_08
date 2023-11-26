@@ -1,5 +1,6 @@
 """Fichero que gestiona los eventos, calculando la cuenta atrás"""
 import sqlite3 as sql
+from crypto import firma
 from tkinter import messagebox
 from crypto.cifrado import Cifrado, Descifrado
 
@@ -43,6 +44,10 @@ class GestionEventos:
         self.connection.commit()  # guardamos los cambios
         messagebox.showinfo("Éxito", "Nuevo evento creado con éxito")
 
+        # Sobreescribe la firma anterior
+        firma.firmar(self.obtener_eventos(usuario, data_key))
+
+
     def obtener_eventos(self, usuario, data_key):
         """Método que obtiene todos los eventos del usuario"""
         # obtenemos los eventos del usuario
@@ -80,6 +85,10 @@ class GestionEventos:
                                     (usuario, row[2], row[4]))
 
         self.connection.commit()  # guardamos los cambios
+
+        # Sobreescribe la firma anterior
+        firma.firmar(self.obtener_eventos(usuario, data_key))
+
         messagebox.showinfo("Éxito", "Evento eliminado con éxito")
 
     def cerrar_conexion(self):
