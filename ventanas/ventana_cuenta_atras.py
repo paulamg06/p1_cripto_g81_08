@@ -39,12 +39,15 @@ class VentanaCuentaAtras(tk.Toplevel):
 
     def verificar_firma(self):
         """Método que verifica la firma y muestra el resultado"""
-        try:
+        """try:
             signature = firma.verificar_firma()
             mensaje_s = "Verificación de la firma correcto" + str(signature)
             messagebox.showinfo("Éxito", mensaje_s)
         except InvalidSignature as e:
             messagebox.showerror("Error Firma", "Error al verificar la firma del usuario")
+        """
+
+        signature = firma.verificar_firma()
 
         try:
             cert_A = firma.verificar_certificado_A()

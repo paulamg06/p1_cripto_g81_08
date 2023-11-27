@@ -24,6 +24,8 @@ def firmar(message):
     # Carga la clave privada
     private_key = gestion_claves.cargar_priv_key()
 
+
+
     # Firma y se guarda
     signature = private_key.sign(
         b64_message,
