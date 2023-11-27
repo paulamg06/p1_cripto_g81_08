@@ -18,7 +18,7 @@ def crear_csr():
         x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, "MADRID"),
         x509.NameAttribute(NameOID.ORGANIZATION_NAME, "UC3M"),
         x509.NameAttribute(NameOID.ORGANIZATION_UNIT_NAME, "INF"),
-        x509.NameAttribute(NameOID.COMMON_NAME, "AC1"),
+        x509.NameAttribute(NameOID.COMMON_NAME, "AC2"),
     ])).add_extension(
         x509.SubjectAlternativeName([
             x509.DNSName("AC1.com"),
@@ -44,3 +44,5 @@ def cargar_certificado(file):
 
     return cert_pem.public_bytes(encoding=serialization.Encoding.PEM)
 
+if __name__ == '__main__':
+    crear_csr()

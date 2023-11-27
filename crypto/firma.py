@@ -1,4 +1,5 @@
 """Fichero que contiene las funciones para la parte de la firma"""
+import base64
 import pickle
 
 from cryptography import x509
@@ -14,9 +15,11 @@ def firmar(message):
     """Función que devuelve la firma"""
 
     b64_message = pickle.dumps(message)
+
     # Pasa a bytes la info
     #message_str = " ".join(str(item) for item in message)  # Pasa la lista a cadena de caracteres
     #b64_message = message_str.encode("utf-8")  # Pasa la cadena a bytes
+
 
     # Carga la clave privada
     private_key = gestion_claves.cargar_priv_key()
@@ -37,13 +40,13 @@ def guardar_firma(signature, b64_message):
     """Función que guarda la firma"""
     # Crea un diccionario con la firma, el mensaje y el certificado
     ac_cert = certificado.cargar_certificado("ac1cert.pem")  # Certificado de AC
-    a_cert = certificado.cargar_certificado("Acert2.pem")
+    a_cert = certificado.cargar_certificado("Acert.pem")
 
     firma = {
         "signature": signature,
         "b64_message": b64_message,
         "certificadoAC": ac_cert,
-        "certificadoA" : a_cert
+        "certificadoA": a_cert
     }
 
     # Guarda el diccionario en un fichero
@@ -62,14 +65,14 @@ def verificar_firma():
     """Función que verifica la firma del usuario con la clave de A"""
     # Carga la firma, el mensaje y el certificado
     firma = cargar_firma()
-    signature, b64_message, cert_pem = firma["signature"], firma["b64_message"], firma["certificadoAC"]
+    signature, b64_message, cert_pem = firma["signature"], firma["b64_message"], firma["certificadoA"]
     print("s", signature, "\nb64", b64_message, "\ncert", cert_pem)
 
     # Carga el certificado desde la cadena PEM
-    ac_cert = x509.load_pem_x509_certificate(cert_pem)
+    a_cert = x509.load_pem_x509_certificate(cert_pem)
 
     # Obtiene la clave pública del certificado
-    public_key = ac_cert.public_key()
+    public_key = a_cert.public_key()
 
     # Verifica con la clave publica
     public_key.verify(
@@ -81,9 +84,6 @@ def verificar_firma():
         ),
         hashes.SHA256()
     )
-
-    # Verifica el siguiente nivel
-    #verificar_firma_A(cert, b64_message, firma)
     return firma
 
 

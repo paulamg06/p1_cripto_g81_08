@@ -40,7 +40,7 @@ def save_priv_key():
 
 def cargar_priv_key():
     """Función que carga una clave privada a partir de un archivo"""
-    with open("ficheros/priv_key.pem", "rb") as key_file:
+    with open("../ficheros/priv_key.pem", "rb") as key_file:
         return serialization.load_pem_private_key(
             key_file.read(),
             password=bytes(generar_contrasena(), 'ascii')
