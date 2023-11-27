@@ -2,6 +2,7 @@
 import pickle
 
 from cryptography import x509
+from cryptography.exceptions import InvalidSignature
 
 from crypto import gestion_claves, certificado
 
@@ -12,9 +13,10 @@ from cryptography.hazmat.primitives import hashes
 def firmar(message):
     """Función que devuelve la firma"""
 
+    b64_message = pickle.dumps(message)
     # Pasa a bytes la info
-    message_str = " ".join(str(item) for item in message)  # Pasa la lista a cadena de caracteres
-    b64_message = message_str.encode("utf-8")  # Pasa la cadena a bytes
+    #message_str = " ".join(str(item) for item in message)  # Pasa la lista a cadena de caracteres
+    #b64_message = message_str.encode("utf-8")  # Pasa la cadena a bytes
 
     # Carga la clave privada
     private_key = gestion_claves.cargar_priv_key()
@@ -28,18 +30,20 @@ def firmar(message):
         ),
         hashes.SHA256()
     )
-    guardar_firma(signature, message)
+    guardar_firma(signature, b64_message)
 
 
 def guardar_firma(signature, b64_message):
     """Función que guarda la firma"""
     # Crea un diccionario con la firma, el mensaje y el certificado
-    cert = certificado.cargar_certificado("Acert2.pem")  # Certificado de A
+    ac_cert = certificado.cargar_certificado("ac1cert.pem")  # Certificado de AC
+    a_cert = certificado.cargar_certificado("Acert2.pem")
 
     firma = {
         "signature": signature,
         "b64_message": b64_message,
-        "certificado": cert
+        "certificadoAC": ac_cert,
+        "certificadoA" : a_cert
     }
 
     # Guarda el diccionario en un fichero
@@ -58,21 +62,19 @@ def verificar_firma():
     """Función que verifica la firma del usuario con la clave de A"""
     # Carga la firma, el mensaje y el certificado
     firma = cargar_firma()
-    signature, b64_message, cert_pem = firma["signature"], firma["b64_message"], firma["certificado"]
+    signature, b64_message, cert_pem = firma["signature"], firma["b64_message"], firma["certificadoAC"]
+    print("s", signature, "\nb64", b64_message, "\ncert", cert_pem)
 
     # Carga el certificado desde la cadena PEM
-    cert = x509.load_pem_x509_certificate(cert_pem)
+    ac_cert = x509.load_pem_x509_certificate(cert_pem)
 
     # Obtiene la clave pública del certificado
-    public_key = cert.public_key()
+    public_key = ac_cert.public_key()
 
-    # Si b64_message es una lista, se convierte a cadena de caracteres
-    b64_message = " ".join(map(str, b64_message))
-
-    # Verifica la clave publica
+    # Verifica con la clave publica
     public_key.verify(
         signature,
-        b64_message.encode('utf-8'),
+        b64_message,
         padding.PSS(
             mgf=padding.MGF1(hashes.SHA256()),
             salt_length=padding.PSS.MAX_LENGTH
@@ -85,61 +87,38 @@ def verificar_firma():
     return firma
 
 
-def verificar_firma_A(cert, b64_message, firma):
-    """Función que verifica la firma de A con su clave"""
+def verificar_certificado_A():
+    """"""
+    firma = cargar_firma()
+    cert_a_pem = firma["certificadoA"]
+    cert_ac_pem = firma["certificadoAC"]
 
-    # Verifica la clave pública de A (nivel anterior) con la firma de A
-    cert.public_key().verify(
-        cert.signature,
-        b64_message.encode('utf-8'),
-        padding.PSS(
-            mgf=padding.MGF1(hashes.SHA256()),
-            salt_length=padding.PSS.MAX_LENGTH
-        ),
-        hashes.SHA256()
+    cert_ac = x509.load_pem_x509_certificate(cert_ac_pem)
+    ac_pk = cert_ac.public_key()
+
+    cert_check = x509.load_pem_x509_certificate(cert_a_pem)
+    ac_pk.verify(
+        cert_check.signature,
+        cert_check.tbs_certificate_bytes,
+        padding.PKCS1v15(),
+        cert_check.signature_hash_algorithm
     )
 
-    # Verifica el siguiente nivel
-    verificar_firma2(cert, b64_message, firma)
+    return cert_check
 
+def verificar_certificado_AC():
+    """"""
+    firma = cargar_firma()
+    cert_ac_pem = firma["certificadoAC"]
 
-def verificar_firma2(cert, b64_message, firma):
-    """Función que verifica la firma de AC con la clave de A"""
-    # Carga el certificado de AC
-    ac_cert_pem = certificado.cargar_certificado("Acert.pem")
-
-    # Carga el certificado desde la cadena PEM
-    ac_cert = x509.load_pem_x509_certificate(ac_cert_pem)
-
-    # Verifica la clave pública de A con la firma de AC
-    cert.public_key().verify(
-        ac_cert.signature,
-        b64_message.encode('utf-8'),
-        padding.PSS(
-            mgf=padding.MGF1(hashes.SHA256()),
-            salt_length=padding.PSS.MAX_LENGTH
-        ),
-        hashes.SHA256()
+    cert_check = x509.load_pem_x509_certificate(cert_ac_pem)
+    ac_pk = cert_check.public_key()
+    ac_pk.verify(
+        cert_check.signature,
+        cert_check.tbs_certificate_bytes,
+        padding.PKCS1v15(),
+        cert_check.signature_hash_algorithm
     )
 
-    # Verifica el último nivel
-    verificar_firma_AC(ac_cert, b64_message, firma)
+    return cert_check
 
-
-def verificar_firma_AC(ac_cert, b64_message, firma):
-    """Función que verifica la firma de AC con su clave"""
-    # Verifica la clave pública de AC (nivel anterior) con la firma de AC
-    ac_cert.public_key().verify(
-        ac_cert.signature,
-        b64_message,
-        padding.PSS(
-            mgf=padding.MGF1(hashes.SHA256()),
-            salt_length=padding.PSS.MAX_LENGTH
-        ),
-        hashes.SHA256()
-    )
-    return firma  # Exito
-
-
-if __name__ == '__main__':
-    verificar_firma()

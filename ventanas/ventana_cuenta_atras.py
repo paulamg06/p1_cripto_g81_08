@@ -2,6 +2,8 @@
 import tkinter as tk
 from tkinter import messagebox
 
+from cryptography.exceptions import InvalidSignature
+
 from crypto import firma
 
 
@@ -37,10 +39,29 @@ class VentanaCuentaAtras(tk.Toplevel):
 
     def verificar_firma(self):
         """Método que verifica la firma y muestra el resultado"""
-        signature = firma.verificar_firma()
-        if signature:
-            mensaje = "Verificación de la firma correcto" + str(signature)
-            messagebox.showinfo("Éxito", mensaje)
+        try:
+            signature = firma.verificar_firma()
+            mensaje_s = "Verificación de la firma correcto" + str(signature)
+            messagebox.showinfo("Éxito", mensaje_s)
+        except InvalidSignature as e:
+            messagebox.showerror("Error Firma", "Error al verificar la firma del usuario")
+
+        try:
+            cert_A = firma.verificar_certificado_A()
+            mensaje_A = "Verificación del certificado del usuario correcto" + str(cert_A)
+            messagebox.showinfo("Éxito", mensaje_A)
+        except Exception as e:
+            messagebox.showerror("Error CertA", "Error al verificar el certificado del usuario")
+
+        try:
+            cert_AC = firma.verificar_certificado_AC()
+            mensaje_AC = "Verificación del certificado de la Autoridad de Certificación correcto" + str(cert_AC)
+            messagebox.showinfo("Éxito", mensaje_AC)
+        except Exception as e:
+            messagebox.showerror("Error CertAC", "Error al verificar el certificado de la Autoridad de Certificación")
+
+        sign = firma.cargar_firma()
+        messagebox.showinfo("Éxito", "Firma:\n\n" + str(sign["signature"]))
 
     def imprimir_eventos(self, usuario):
         """Método que imprime los eventos en la interfaz"""

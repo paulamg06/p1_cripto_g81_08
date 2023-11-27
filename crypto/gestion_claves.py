@@ -23,7 +23,6 @@ def generar_contrasena():
 
 def save_priv_key():
     """Función que serializa y guarda la clave privada"""
-    print("Hola")
     # Genera la clave privada
     private_key = rsa.generate_private_key(
         public_exponent=65537,
@@ -41,7 +40,6 @@ def save_priv_key():
 
 def cargar_priv_key():
     """Función que carga una clave privada a partir de un archivo"""
-    print(os.getcwd())
     with open("ficheros/priv_key.pem", "rb") as key_file:
         return serialization.load_pem_private_key(
             key_file.read(),
@@ -68,3 +66,7 @@ def cargar_pub_key():
     """Función que deserializa la clave publica"""
     with open("../ficheros/pub_key.pem", "rb") as pub_key_file:
         return load_pem_public_key(pub_key_file.read())
+
+if __name__ == '__main__':
+    save_priv_key()
+    save_pub_key()
