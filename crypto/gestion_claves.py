@@ -22,7 +22,7 @@ def generar_contrasena():
 
 
 def save_priv_key():
-    """Función que serializa y guarda la clave privada. NO HAY QUE EJECUTARLO"""
+    """Función que serializa y guarda la clave privada"""
     # Genera la clave privada
     private_key = rsa.generate_private_key(
         public_exponent=65537,
@@ -30,22 +30,45 @@ def save_priv_key():
     )
 
     # Serializa la clave privada y la guarda
-    priv_pem = private_key.private_bytes(
-        encoding=serialization.Encoding.PEM,
-        format=serialization.PrivateFormat.PKCS8,
-        encryption_algorithm=serialization.BestAvailableEncryption(bytes(generar_contrasena(), 'ascii'))
-    )
-    with open("../ficheros/priv_key.pem", "wb") as priv_key_file:
-        priv_key_file.write(priv_pem)
+    try:
+        priv_pem = private_key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.PKCS8,
+            encryption_algorithm=serialization.BestAvailableEncryption(bytes(generar_contrasena(), 'ascii'))
+        )
+    except ValueError as ve:
+        print(f"Error al procesar la clave privada: {ve}")
+        exit(-1)
+    except Exception as e:
+        print(f"Ocurrió un error inesperado: {e}")
+        exit(-1)
+
+    # Abre el archivo y lo guarda
+    try:
+        with open("../ficheros/priv_key.pem", "wb") as priv_key_file:
+            priv_key_file.write(priv_pem)
+    except FileNotFoundError:
+        print("Error: no se encuentra el archivo")
+        exit(-1)
+    except IOError as e:
+        print(f"Error al leer el archivo: {e}")
+        exit(-1)
 
 
 def cargar_priv_key():
     """Función que carga una clave privada a partir de un archivo"""
-    with open("ficheros/priv_key.pem", "rb") as key_file:
-        return serialization.load_pem_private_key(
-            key_file.read(),
-            password=bytes(generar_contrasena(), 'ascii')
-        )
+    try:
+        with open("ficheros/priv_key.pem", "rb") as key_file:
+            return serialization.load_pem_private_key(
+                key_file.read(),
+                password=bytes(generar_contrasena(), 'ascii')
+            )
+    except FileNotFoundError:
+        print("Error: no se encuentra el archivo")
+        exit(-1)
+    except IOError as e:
+        print(f"Error al leer el archivo: {e}")
+        exit(-1)
 
 
 def save_pub_key():
@@ -56,18 +79,41 @@ def save_pub_key():
     public_key = private_key.public_key()
 
     # Serializa la clave publica y la guarda
-    pub_pem = public_key.public_bytes(
-        encoding=serialization.Encoding.PEM,
-        format=serialization.PublicFormat.SubjectPublicKeyInfo
-    )
-    with open("../ficheros/pub_key.pem", "wb") as pub_key_file:
-        pub_key_file.write(pub_pem)
+    try:
+        pub_pem = public_key.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        )
+    except ValueError as ve:
+        print(f"Error al procesar la clave pública: {ve}")
+        exit(-1)
+    except Exception as e:
+        print(f"Ocurrió un error inesperado: {e}")
+        exit(-1)
+
+    # Abre el archivo y lo guarda
+    try:
+        with open("../ficheros/pub_key.pem", "wb") as pub_key_file:
+            pub_key_file.write(pub_pem)
+    except FileNotFoundError:
+        print("Error: no se encuentra el archivo")
+        exit(-1)
+    except IOError as e:
+        print(f"Error al leer el archivo: {e}")
+        exit(-1)
 
 
 def cargar_pub_key():
     """Función que deserializa la clave publica"""
-    with open("../ficheros/pub_key.pem", "rb") as pub_key_file:
-        return load_pem_public_key(pub_key_file.read())
+    # Abre el archivo y lo carga
+    try:
+        with open("../ficheros/pub_key.pem", "rb") as pub_key_file:
+            return load_pem_public_key(pub_key_file.read())
+    except FileNotFoundError:
+        print("Error: no se encuentra el archivo")
+    except IOError as e:
+        print(f"Error al leer el archivo: {e}")
+
 
 
 """Esto solo se usa para crear las claves, no debería de hacer falta ejecutarlo"""

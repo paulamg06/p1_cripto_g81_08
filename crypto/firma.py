@@ -18,16 +18,23 @@ def firmar(message):
     private_key = gestion_claves.cargar_priv_key()
 
     # Firma con la clave privada
-    signature = private_key.sign(
-        b64_message,
-        padding.PSS(
-            mgf=padding.MGF1(hashes.SHA256()),
-            salt_length=padding.PSS.MAX_LENGTH
-        ),
-        hashes.SHA256()
-    )
-    # Guarda la firma
-    guardar_firma(signature, b64_message)
+    try:
+        signature = private_key.sign(
+            b64_message,
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA256()
+        )
+        # Guarda la firma
+        guardar_firma(signature, b64_message)
+    except TypeError as te:
+        print(f"Error en el tipo de dato de b64_message: {te}")
+    except ValueError as ve:
+        print(f"Error al firmar con la clave privada: {ve}")
+    except Exception as e:
+        print(f"Ocurrió un error inesperado: {e}")
 
 
 def guardar_firma(signature, b64_message):
@@ -44,15 +51,29 @@ def guardar_firma(signature, b64_message):
     }
 
     # Guarda el diccionario en un fichero
-    with open("ficheros/firma.sig", "wb") as signature_file:
-        pickle.dump(dic_file, signature_file)
+    try:
+        with open("ficheros/firma.sig", "wb") as signature_file:
+            pickle.dump(dic_file, signature_file)
+    except FileNotFoundError:
+        print("Error: no se encuentra el archivo")
+        exit(-1)
+    except IOError as e:
+        print(f"Error al leer el archivo: {e}")
+        exit(-1)
 
 
 def cargar_firma():
     """Función que carga y devuelve la firma y el mensaje correspondiente"""
     # Abre el fichero donde se ha guardado la firma
-    with open("ficheros/firma.sig", "rb") as signature_file:
-        return pickle.load(signature_file)
+    try:
+        with open("ficheros/firma.sig", "rb") as signature_file:
+            return pickle.load(signature_file)
+    except FileNotFoundError:
+        print("Error: no se encuentra el archivo")
+        exit(-1)
+    except IOError as e:
+        print(f"Error al leer el archivo: {e}")
+        exit(-1)
 
 
 def verificar_firma():

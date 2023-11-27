@@ -29,20 +29,38 @@ def crear_csr():
     ).sign(private_key, hashes.SHA256())
 
     # Guarda el csr en un fichero
-    with open("../ficheros/csr.pem", "wb") as csr_file:
-        csr_file.write(csr.public_bytes(serialization.Encoding.PEM))
+    try:
+        with open("../ficheros/csr.pem", "wb") as csr_file:
+            csr_file.write(csr.public_bytes(serialization.Encoding.PEM))
+    except FileNotFoundError:
+        print("Error: no se encuentra el archivo")
+        exit(-1)
+    except IOError as e:
+        print(f"Error al leer el archivo: {e}")
+        exit(-1)
+
 
 def cargar_certificado(file):
     """Función que carga el certificado guardado"""
     file_path = "ficheros/" + str(file)
     # Abre el certificado
-    with open(file_path, "rb") as cert_file:
-        pem_data = cert_file.read()
+    try:
+        with open(file_path, "rb") as cert_file:
+            pem_data = cert_file.read()
+    except FileNotFoundError:
+        print("Error: no se encuentra el archivo")
+        exit(-1)
+    except IOError as e:
+        print(f"Error al leer el archivo: {e}")
+        exit(-1)
 
     # Devuelve el certificado
     cert_pem = x509.load_pem_x509_certificate(pem_data)
 
     return cert_pem.public_bytes(encoding=serialization.Encoding.PEM)
 
+
+
+"""Esto solo se usa para crear las claves, no debería de hacer falta ejecutarlo"""
 if __name__ == '__main__':
     crear_csr()
