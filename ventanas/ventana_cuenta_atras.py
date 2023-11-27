@@ -39,32 +39,30 @@ class VentanaCuentaAtras(tk.Toplevel):
 
     def verificar_firma(self):
         """Método que verifica la firma y muestra el resultado"""
-        """try:
+        try:
             signature = firma.verificar_firma()
-            mensaje_s = "Verificación de la firma correcto" + str(signature)
+            mensaje_s = "Verificación de la firma correcto\n" + str(signature)
             messagebox.showinfo("Éxito", mensaje_s)
         except InvalidSignature as e:
             messagebox.showerror("Error Firma", "Error al verificar la firma del usuario")
-        """
-
-        signature = firma.verificar_firma()
+            self.app.abrir_menu_principal()
 
         try:
-            cert_A = firma.verificar_certificado_A()
-            mensaje_A = "Verificación del certificado del usuario correcto" + str(cert_A)
-            messagebox.showinfo("Éxito", mensaje_A)
+            cert_a = firma.verificar_certificado_A()
+            mensaje_a = "Verificación del certificado del usuario correcto\n" + str(cert_a)
+            messagebox.showinfo("Éxito", mensaje_a)
         except Exception as e:
             messagebox.showerror("Error CertA", "Error al verificar el certificado del usuario")
+            self.app.abrir_menu_principal()
 
         try:
-            cert_AC = firma.verificar_certificado_AC()
-            mensaje_AC = "Verificación del certificado de la Autoridad de Certificación correcto" + str(cert_AC)
-            messagebox.showinfo("Éxito", mensaje_AC)
+            cert_ac = firma.verificar_certificado_AC()
+            mensaje_ac = "Verificación del certificado de la Autoridad de Certificación correcto\n" + str(cert_ac)
+            messagebox.showinfo("Éxito", mensaje_ac)
         except Exception as e:
             messagebox.showerror("Error CertAC", "Error al verificar el certificado de la Autoridad de Certificación")
+            self.app.abrir_menu_principal()
 
-        sign = firma.cargar_firma()
-        messagebox.showinfo("Éxito", "Firma:\n\n" + str(sign["signature"]))
 
     def imprimir_eventos(self, usuario):
         """Método que imprime los eventos en la interfaz"""

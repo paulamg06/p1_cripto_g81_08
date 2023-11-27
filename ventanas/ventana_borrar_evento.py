@@ -49,6 +49,8 @@ class VentanaBorrarEvento(tk.Toplevel):
     def borrar_evento(self):
         """Método que borra el evento"""
         self.app.gestion.borrar_evento(self.evento_actual, self.usuario, self.app.data_key)
+        # Sale de la ventana
+        self.salir()
 
 
     def salir(self):
