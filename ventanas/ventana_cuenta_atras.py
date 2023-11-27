@@ -39,29 +39,29 @@ class VentanaCuentaAtras(tk.Toplevel):
 
     def verificar_firma(self):
         """Método que verifica la firma y muestra el resultado"""
+        mensaje = ""
         try:
             signature = firma.verificar_firma()
-            mensaje_s = "Verificación de la firma correcto\n" + str(signature)
-            messagebox.showinfo("Éxito", mensaje_s)
+            mensaje += "Verificación de la firma correcto:\n" + str(signature) + "\n\n\n"
         except InvalidSignature as e:
             messagebox.showerror("Error Firma", "Error al verificar la firma del usuario")
             self.app.abrir_menu_principal()
 
         try:
             cert_a = firma.verificar_certificado_A()
-            mensaje_a = "Verificación del certificado del usuario correcto\n" + str(cert_a)
-            messagebox.showinfo("Éxito", mensaje_a)
+            mensaje += "Verificación del certificado del usuario correcto:\n" + str(cert_a) + "\n\n\n"
         except Exception as e:
             messagebox.showerror("Error CertA", "Error al verificar el certificado del usuario")
             self.app.abrir_menu_principal()
 
         try:
             cert_ac = firma.verificar_certificado_AC()
-            mensaje_ac = "Verificación del certificado de la Autoridad de Certificación correcto\n" + str(cert_ac)
-            messagebox.showinfo("Éxito", mensaje_ac)
+            mensaje += "Verificación del certificado de la Autoridad de Certificación correcto:\n" + str(cert_ac)
         except Exception as e:
             messagebox.showerror("Error CertAC", "Error al verificar el certificado de la Autoridad de Certificación")
             self.app.abrir_menu_principal()
+
+        messagebox.showinfo("Éxito", mensaje)
 
 
     def imprimir_eventos(self, usuario):
