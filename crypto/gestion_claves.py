@@ -114,9 +114,3 @@ def cargar_pub_key():
     except IOError as e:
         print(f"Error al leer el archivo: {e}")
 
-
-
-"""Esto solo se usa para crear las claves, no debería de hacer falta ejecutarlo"""
-if __name__ == '__main__':
-    save_priv_key()
-    save_pub_key()

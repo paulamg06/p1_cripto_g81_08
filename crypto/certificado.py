@@ -59,8 +59,3 @@ def cargar_certificado(file):
 
     return cert_pem.public_bytes(encoding=serialization.Encoding.PEM)
 
-
-
-"""Esto solo se usa para crear las claves, no debería de hacer falta ejecutarlo"""
-if __name__ == '__main__':
-    crear_csr()
